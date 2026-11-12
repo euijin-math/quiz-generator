@@ -6,6 +6,7 @@ dependencies = [
     "anthropic>=2.8.0",
     "fastapi>=0.162.5",
     "pydantic-settings>=2.16.2",
+    "pypdf>=7.0.1",
     "uvicorn[standard]>=0.54.0",
 ]
 
