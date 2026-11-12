@@ -8,6 +8,7 @@ Values are read (in priority order) from:
 
 from functools import lru_cache
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,6 +17,12 @@ class Settings(BaseSettings):
 
     app_name: str = "Quiz Generator"
     environment: str = "development"  # development | production
+
+    # Claude API
+    # SecretStr hides the value when printed/logged: it shows '**********'.
+    # Use .get_secret_value() only at the exact place you need the real key.
+    anthropic_api_key: SecretStr
+    claude_model: str = "claude-opus-5-5"
 
 
 @lru_cache
