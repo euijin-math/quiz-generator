@@ -14,7 +14,7 @@ client = anthropic.Anthropic(api_key=settings.anthropic_api_key.get_secret_value
 response = client.messages.create(
     model=settings.claude_model,
     max_tokens=1024,
-    messages=[{"role": "user", "content": "Explain Bezout's Rule in two sentences."}]
+    messages=[{"role": "user", "content": "Explain Bezout's Rule in two sentences."}],
 )
 
 

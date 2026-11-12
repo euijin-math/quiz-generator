@@ -75,7 +75,49 @@ Next step: test approach B (send the PDF directly to Claude, which reads page im
 
 ## B. Direct PDF input to Claude (week 1, Fri)
 
-_TODO_
+Script: `scripts/claude_read_pdf.py` — sends the whole PDF as a base64 `document` block
+and asks Claude (`claude-opus-5-5`) to transcribe it into Markdown with LaTeX math.
+The API gives the model both the text layer **and** an image of every page.
+
+### Results
+
+| Sample | Pages | Input tokens | Input / page | Output tokens | Cost (USD) | Page separators |
+|---|---|---|---|---|---|---|
+| Sample1 | 5 | 11,638 | 2,328 | 3,199 | $0.11 | 5 / 5 |
+| Sample2 | 12 | 31,763 | 2,647 | 15,849 | $0.44 | 12 / 12 |
+| Sample3 | 6 | 10,889 | 1,815 | 2,817 | $0.10 | 6 / 6 |
+| **Total** | 23 | | | | **$0.65** | |
+
+None of the runs was cut off by `max_tokens` (32,000).
+
+### The same failure cases, side by side
+
+| Case | pypdf | Claude |
+|---|---|---|
+| Sample1 Poisson pmf | `e→ωt (ωt)x` / `x!` | $P(x) = e^{-\lambda t}\frac{(\lambda t)^x}{x!}$ |
+| Sample1 std. dev. | `ε =` / `→` / `ωt` | $\sigma = \sqrt{\lambda t}$ |
+| Sample1 R code | `dpois(8, 3 ↑ 2)` | `dpois(8, 3 * 2)` |
+| Sample2 rational function | `R1x2=x-1 x2-4` | $R(x) = \frac{x-1}{x^2-4}$ |
+| Sample2 domain | `5xƒxZ-2, xZ26` | $\{x \mid x \neq -2, x \neq 2\}$ |
+| Sample2 graph | axis labels mixed into text | `[Figure: ... through $(1, 1)$ ...]` |
+| Sample3 Power Rule | *(empty)* | $\frac{d}{dx}[x^n] = nx^{n-1}$ |
+| Sample3 pages 3 & 5 | *(nearly empty)* | 20+ log / integral formulas |
+
+### Observations
+
+- Every symbol substitution seen with pypdf (`λ→ω`, `( )→1 2`, `≠→Z`, ...) is gone.
+- Formulas embedded as drawings (Sample3) are read from the page image.
+- Running headers/footers were removed and figures were summarized as instructed.
+- Cost is dominated by **output** tokens ($20/MTok vs $4/MTok input):
+  for Sample2, output was ~70% of the cost. The real app will send the PDF together
+  with the question-generation prompt (no full transcription), so output will be much shorter.
+- Rough input cost: ~2,000–2,700 tokens per page ≈ **$0.01 per page** on Opus 5.5.
+
+### Open questions (to check on Sat)
+
+- Did Claude **add or alter** anything not in the original? Needs line-by-line comparison
+  against the PDF (e.g. Sample2 parenthetical limit notation).
+- Are results consistent if the same PDF is sent twice?
 
 ## Comparison and decision (week 1, Sat)
 
