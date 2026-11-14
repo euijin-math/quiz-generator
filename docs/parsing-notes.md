@@ -119,6 +119,56 @@ None of the runs was cut off by `max_tokens` (32,000).
   against the PDF (e.g. Sample2 parenthetical limit notation).
 - Are results consistent if the same PDF is sent twice?
 
+### Answers to the open questions
+
+- **Added or altered content:** none found in the 21 graded formulas (see below).
+- **Omission against instructions:** Sample3 page 6 is a grid of six *identical* cards.
+  Claude transcribed one card and wrote "six identical cards" instead of repeating it,
+  even though the prompt said not to omit anything. No information was lost here, but it
+  shows the model may apply its own judgment over an explicit instruction.
+  → Keep this page as a **regression case** for the eval set.
+- **Consistency across runs:** not tested yet (deferred to the week 4 eval work).
+
 ## Comparison and decision (week 1, Sat)
 
-_TODO_
+### Formula-level grading
+
+21 formulas were picked across the three samples and graded by hand
+(`docs/parsing-scores.csv`): **2** = correct, **1** = partly correct / readable with effort,
+**0** = wrong or missing.
+
+| Sample | Formulas | pypdf | Claude |
+|---|---|---|---|
+| Sample1 | 6 | 4 / 12 (33%) | 12 / 12 (100%) |
+| Sample2 | 7 | 0 / 14 (0%) | 14 / 14 (100%) |
+| Sample3 | 8 | 0 / 16 (0%) | 16 / 16 (100%) |
+| **Total** | **21** | **4 / 42 (10%)** | **42 / 42 (100%)** |
+
+All of pypdf's points come from Sample1, and even those are *plausible-looking but wrong*
+(`λ` decoded as `ω`, `×` as `↑`). pypdf also scrambles the reading order on Sample2:
+the extracted text does not follow the order of the page.
+
+### Decision
+
+**The app will send the PDF directly to Claude as a `document` block.**
+pypdf text extraction is dropped from the generation pipeline.
+
+| | pypdf | Claude PDF input |
+|---|---|---|
+| Formula accuracy | 10% | 100% |
+| Equations drawn as vectors | lost | read from the page image |
+| Reading order | sometimes scrambled | follows the page |
+| Cost | free | ~$0.01 input per page (Opus 5.5) |
+| Speed | instant | tens of seconds per document |
+
+### Consequences for later weeks
+
+- **Week 2:** send the PDF plus the generation prompt in **one** request; no separate
+  transcription step (saves the output tokens, which were ~70% of the cost).
+- **Tier limits:** PDF page count is the main input-cost driver, so the per-tier page
+  limit is a cost control and must be checked *before* calling the API
+  (pypdf is still useful here: `len(PdfReader(...).pages)` is cheap and reliable).
+- **Week 3–4:** never trust the output blindly. LaTeX compile checks and SymPy answer
+  checks catch errors; the Sample3 page 6 case shows instructions alone are not enough.
+- **Open:** consistency across repeated runs, and whether a cheaper model
+  (e.g. Haiku 5.5) reads math well enough (week 8 model comparison).

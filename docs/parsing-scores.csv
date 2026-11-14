@@ -1,0 +1,22 @@
+sample,page,formula_id,description,pypdf_score,claude_score,pypdf_notes,claude_notes
+Sample1,1,S1-01,Poisson pmf P(x),0,2,cannot read fraction. change lambda to omega. cannot read exponent.,perfect.
+Sample1,1,S1-02,Mean mu = lambda t,1,2,lambda is changed to omega,perfect
+Sample1,1,S1-03,Std dev sigma = sqrt(lambda t),0,2,cannot read square root. change lambda to omega., perfect.
+Sample1,1,S1-04,Rate lambda = 3 in problem 3,1,2,lambda is changed to omega,perfect.
+Sample1,2,S1-05,R code ppois(11 3*4 lower.tail=FALSE),1,2,the multiplication sign * is changed to up arrow. There is a space in 'F ALSE',perfect
+Sample1,2,S1-06,R code ppois(17 ...) minus ppois(11 ...),1,2,multiplication sign is converted to up arroaw and minus sign changed to down arrow.,perfect.
+Sample2,1,S2-01,rational function R(x) = (x-1)/(x^2-4),0,2,cannot read parenthesis. cannot read fraction.,perfect.
+Sample2,1,S2-02,domain of a function {x|x \neq -2 x \neq 2},0,2,cannot read curly brackets. cannot read 'not equals to' sign.,perfect
+Sample2,1,S2-03,evaluation of R(x) at x = 1: R(x) = x - 1 / (x +2)(x-2),0,2,cannot read fraction. cannot read approximation sign., perfect
+Sample2,2,S2-04,intervals (-\infty -2) (-2 1) (1 2) (2 \infty),0,2,cannot read parenthesis. cannot read infinity.,perfect.
+Sample2,2,S2-05,limit_( x -> -2^+ R(x) = + \infty),0,2,cannot read parenthesis. cannot read limit and arrow signs.,perfect
+Sample2,4,S2-06,long division: divide x^2-1 by x,0,2,cannot read long division sign.,perfect
+Sample2,1,S2-07,Graph figure (description vs axis labels),0,2,don't recognize, perfect
+Sample3,1,S3-01,Limit definition of derivative,0,2,missing,perfect
+Sample3,1,S3-02,Power rule,0,2,missing,perfect
+Sample3,1,S3-03,Quotient rule,0,2,missing,perfect
+Sample3,1,S3-04,Chain rule,0,2,missing,perfect
+Sample3,2,S3-05,Riemann sum integral,0,2,missing,perfect
+Sample3,3,S3-06,Change of base log formula,0,2,missing,perfect
+Sample3,4,S3-07,Washer method volume,0,2,missing,perfect
+Sample3,4,S3-08,Surface area of revolution,0,2,missing,perfect
