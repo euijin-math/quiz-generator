@@ -24,7 +24,7 @@ filepath = sys.argv[1]
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 new_filename = Path(filepath).stem
-new_filename = new_filename +".txt"
+new_filename = new_filename + ".txt"
 new_filepath = OUT_DIR / new_filename
 
 
@@ -42,8 +42,6 @@ with open(new_filepath, "w", encoding="utf-8") as f:
 print("===== Summary =====")
 print("Total number of pages:", total_pages)
 print("Total number of characters:", total_characters)
-
-
 
 
 # ---------------------------------------------------------------------------
