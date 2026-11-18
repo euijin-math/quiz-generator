@@ -77,3 +77,22 @@ User prompt:
 - One run per case is a smoke test, not proof. Week 3 will enforce N and the
   parts limit in code (JSON schema), so the defense will not depend on the
   model following the rules.
+
+## Week 2 CLI runs (prompt v2, `quiz.py`)
+
+`uv run python quiz.py <pdf> --n 5 --tier <tier>`, no user prompt.
+
+| Sample | Pages | Tier | Input tokens | Output tokens | Cost | Parts per question |
+|---|---|---|---|---|---|---|
+| Sample1 | 5 | free | 11,197 | 3,049 | $0.11 | 2, 3, 3, 3, 3 |
+| Sample3 | 6 | free | 10,448 | 3,526 | $0.11 | 2, 3, 2, 3, 2 |
+| Sample2 | 12 | basic | 31,322 | 4,054 | $0.21 | 3, 0, 3, 3, 0 |
+
+- All 3 outputs have exactly 5 `\question`s and a complete document (`\end{document}`).
+  All compile in Overleaf.
+- Max 3 parts per question held in every run (5 runs in total with v2).
+- Sample2 (12 pages) is the first run with questions that have no parts at all (0 = no `parts` environment).
+- Input cost is ~2,000–2,600 tokens per page, so a 12-page PDF costs about twice
+  as much as a 5-page one. Output cost stays roughly flat (N is the same).
+- Free-tier check works: Sample2 with `--tier free` is rejected before any API call
+  (exit code 3).
